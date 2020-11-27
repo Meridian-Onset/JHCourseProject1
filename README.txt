@@ -66,6 +66,9 @@ This function is intended to use regular expressions to extract column names con
 
 ## Func: activity.labeler(activity.column)
 Replaces labels with descriptive titles for each possi
+
+## Func: dataSplitter(data)
+This function takes the data from the main load function and returns a tidy dataset, with the average of every measurement for every exercise for every subject.
 ======
 
 Notes: 
