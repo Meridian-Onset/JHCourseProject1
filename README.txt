@@ -4,7 +4,7 @@ Version 1.0
 ==================================================================
 Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.
 Smartlab - Non Linear Complex Systems Laboratory
-DITEN - Universit‡ degli Studi di Genova.
+DITEN - Universit√† degli Studi di Genova.
 Via Opera Pia 11A, I-16145, Genoa, Italy.
 activityrecognition@smartlab.ws
 www.smartlab.ws
@@ -51,6 +51,22 @@ The following files are available for the train and test data. Their description
 - 'train/Inertial Signals/body_acc_x_train.txt': The body acceleration signal obtained by subtracting the gravity from the total acceleration. 
 
 - 'train/Inertial Signals/body_gyro_x_train.txt': The angular velocity vector measured by the gyroscope for each window sample. The units are radians/second. 
+
+======
+runanalysis.R
+This file contains the necessary code for reading and cleaning the data contained in this repository.
+
+# Loading and Cleaning the Data
+The data is split into training and test data. The loadData function loads both of these sets into data frame objects, then adds the transformed activity labels and then orders the data by the subject ID column
+
+# Sub-Functions
+## Func: mean.std.extract(column.names, keywords=("mean", "std"))
+
+This function is intended to use regular expressions to extract column names containing specified keywords. The default is to extract those containing 'mean' and 'std', representing the mean and standard deviation respectively.
+
+## Func: activity.labeler(activity.column)
+Replaces labels with descriptive titles for each possi
+======
 
 Notes: 
 ======
