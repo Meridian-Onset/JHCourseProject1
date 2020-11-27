@@ -1,0 +1,44 @@
+---
+title: "Codebook for JH Data Science Project"
+author: "Jonathan Wright"
+date: "23/11/2020"
+output: html_document
+abstract: "This document provides information required to understand the accompanying run_analysis.R file and required data. The script was created as part of a John Hopkins Data Science Specialization project."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data
+The data for this project was taken from [Source](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip).
+Further information regarding the methods for data collection, storage and labeling can be found at [Source](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
+
+# Loading and Cleaning the Data
+The data is split into training and test data. The loadData function loads both of these sets into data frame objects, then adds the transformed activity labels and then orders the data by the subject ID column
+
+# Sub-Functions
+## Func: mean.std.extract(column.names, keywords=("mean", "std"))
+
+This function is intended to use regular expressions to extract column names containing specified keywords. The default is to extract those containing 'mean' and 'std', representing the mean and standard deviation respectively.
+
+## Func: activity.labeler(activity.column)
+Replaces labels with descriptive titles for each possible activity in the data set given the key provided with data.
+
+
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
