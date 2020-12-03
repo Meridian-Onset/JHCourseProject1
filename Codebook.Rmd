@@ -6,6 +6,19 @@ output: html_document
 abstract: "This document provides information required to understand the accompanying run_analysis.R file and required data. The script was created as part of a John Hopkins Data Science Specialization project."
 ---
 
+<style>
+  .col2 {
+    columns: 2 200px;         /* number of columns and width in pixels*/
+    -webkit-columns: 2 200px; /* chrome, safari */
+    -moz-columns: 2 200px;    /* firefox */
+  }
+  .col3 {
+    columns: 3 100px;
+    -webkit-columns: 3 100px;
+    -moz-columns: 3 100px;
+  }
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -15,7 +28,9 @@ The data for this project was taken from [Source](https://d396qusza40orc.cloudfr
 Further information regarding the methods for data collection, storage and labeling can be found at [Source](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 
 # Loading and Cleaning the Data
-The data is split into training and test data. The loadData function loads both of these sets into data frame objects, then adds the transformed activity labels and then orders the data by the subject ID column
+The data is split into training and test data. The loadData function loads both of these sets into data frame objects, then adds the transformed activity labels and then orders the data by the subject ID column. Each subject is assigned a unique ID number and each exercise is renamed with a more descriptive label.
+
+In order to generate a clean data set containing just the averages of each activity for each subject, run the datasplitter function on the dataframe returned by the loadData function. Load this data set into R by with
 
 # Sub-Functions
 ## Func: mean.std.extract(column.names, keywords=("mean", "std"))
@@ -25,20 +40,95 @@ This function is intended to use regular expressions to extract column names con
 ## Func: activity.labeler(activity.column)
 Replaces labels with descriptive titles for each possible activity in the data set given the key provided with data.
 
+# Variable Transformations
+## Relevant Data
+The main load function in runanalysis.R returns all the readings for the mean of each measurement and the standard deviations of each measurement, along with their respective exercise identifier and subject identifier. These columns are then renamed according to the following scheme: 
+<div class = "col3">
+* SubjectID - SubjectID
+* Exercise -  Exercise                                          
+* tBodyAcc-mean()-X - MEAN.X.TBA
+* tBodyAcc-mean()-Y - MEAN.Y.TBA              
+* tBodyAcc-mean()-Z - MEAN.Z.TBA
+* tBodyAcc-std()-X - STD.X.TBA
+* tBodyAcc-std()-Y - STD.Y.TBA
+* tBodyAcc-std()-Z - STD.Z.TBA               
+* tGravityAcc-mean()-X - MEAN.X.TBG
+* tGravityAcc-mean()-Y - MEAN.Y.TBG
+* tGravityAcc-mean()-Z - MEAN.Z.TAG
+* tGravityAcc-std()-X - STD.X.TAG               
+* tGravityAcc-std()-Y - STD.Y.TAG
+* tGravityAcc-std()-Z - STD.Z.TAG
+* tBodyAccJerk-mean()-X - MEAN.X.TBA-J
+* tBodyAccJerk-mean()-Y - MEAN.Y.TBA-J
+* tBodyAccJerk-mean()-Z - MEAN.Z.TBA-J
+* tBodyAccJerk-std()-X - STD.X.TBA-J
+* tBodyAccJerk-std()-Y - STD.Y.TBA-J
+* tBodyAccJerk-std()-Z - STD.Z.TBA-J
+* tBodyGyro-mean()-X - MEAN.X.TBG
+* tBodyGyro-mean()-Y - MEAN.Y.TBG
+* tBodyGyro-mean()-Z - MEAN.Z.TBG
+* tBodyGyro-std()-X - STD.X.TBG
+* tBodyGyro-std()-Y - STD.Y.TBG
+* tBodyGyro-std()-Z - STD.Z.TBG
+* tBodyGyroJerk-mean()-X - MEAN.X.TBG-J
+* tBodyGyroJerk-mean()-Y - MEAN.Y.TBG-J
+* tBodyGyroJerk-mean()-Z - MEAN.Z.TBG-J
+* tBodyGyroJerk-std()-X - STD.X.TBG-J
+* tBodyGyroJerk-std()-Y - STD.Y.TBG-J
+* tBodyGyroJerk-std()-Z - STD.Z.TBG-J
+* tBodyAccMag-mean() - MEAN.TBA-MAG
+* tBodyAccMag-std() - STD.TBA-MAG
+* tGravityAccMag-mean() - MEAN.TGA-MAG
+* tGravityAccMag-std() - STD.TGA-MAG
+* tBodyAccJerkMag-mean() - MEAN.TBA-JMAG
+* tBodyAccJerkMag-std() - STD.TBA-JMAG
+* tBodyGyroMag-mean() - MEAN.TBG-MAG
+* tBodyGyroMag-std() - STD.TBG-MAG
+* tBodyGyroJerkMag-mean() - MEAN.TBG-JMAG
+* tBodyGyroJerkMag-std() - STD.TBG-JMAG
+* fBodyAcc-mean()-X - MEAN.X.FBA
+* fBodyAcc-mean()-Y - MEAN.Y.FBA
+* fBodyAcc-mean()-Z - MEAN.Z.FBA
+* fBodyAcc-std()-X - STD.X.FBA
+* fBodyAcc-std()-Y - STD.Y.FBA
+* fBodyAcc-std()-Z - STD.Z.FBA
+* fBodyAcc-meanFreq()-X - MEAN-F.X.FBA
+* fBodyAcc-meanFreq()-Y - MEAN-F.Y.FBA
+* fBodyAcc-meanFreq()-Z - MEAN-F.Z.FBA
+* fBodyAccJerk-mean()-X - MEAN.X.FBA-J
+* fBodyAccJerk-mean()-Y - MEAN.Y.FBA-J
+* fBodyAccJerk-mean()-Z - MEAN.Z.FBA-J
+* fBodyAccJerk-std()-X - STD.X.FBA-J
+* fBodyAccJerk-std()-Y - STD.Y.FBA-J
+* fBodyAccJerk-std()-Z - STD.Z.FBA-J
+* fBodyAccJerk-meanFreq()-X - MEAN-F.X.FBA-J
+* fBodyAccJerk-meanFreq()-Y - MEAN-F.Y.FBA-J
+* fBodyAccJerk-meanFreq()-Z - MEAN-F.Z.FBA-J
+* fBodyGyro-mean()-X - MEAN.X.FBG
+* fBodyGyro-mean()-Y - MEAN.Y.FBG
+* fBodyGyro-mean()-Z - MEAN.Z.FBG
+* fBodyGyro-std()-X - STD.X.FBG
+* fBodyGyro-std()-Y - STD.Y.FBG
+* fBodyGyro-std()-Z - STD.Z.FBG
+* fBodyGyro-meanFreq()-X - MEAN-F.X.FBG
+* fBodyGyro-meanFreq()-Y - MEAN-F.Y.FBG
+* fBodyGyro-meanFreq()-Z - MEAN-F.Z.FBG
+* fBodyAccMag-mean() - MEAN.FBA-MAG
+* fBodyAccMag-std() - STD.FBA-MAG
+* fBodyAccMag-meanFreq() - MEAN-F.FBA-MAG
+* fBodyBodyAccJerkMag-mean() - MEAN.FBA-JMAG
+* fBodyBodyAccJerkMag-std() - STD.FBA-JMAG
+* fBodyBodyAccJerkMag-meanFreq() - MEAN-F.FBA-JMAG
+* fBodyBodyGyroMag-mean() - MEAN.FBG-MAG
+* fBodyBodyGyroMag-std() - STD.FBG-MAG
+* fBodyBodyGyroMag-meanFreq() - MEAN-F.FBG-MAG
+* fBodyBodyGyroJerkMag-mean() - MEAN.FBG-JMAG
+* fBodyBodyGyroJerkMag-std() - STD.FBG-JMAG
+* fBodyBodyGyroJerkMag-meanFreq() - MEAN-F.FBG-JMAG
+</div>
 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

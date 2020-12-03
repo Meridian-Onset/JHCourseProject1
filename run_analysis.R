@@ -1,3 +1,5 @@
+library(dplyr)
+
 mean.std.extract <- function(data.names, keys=c("mean","std")){
   #extract column headers containing either 'mean' or 'std'
   
@@ -38,15 +40,15 @@ column.names <- c("SubjectID", "Exercise", "MEAN.X.TBA", "MEAN.Y.TBA", "MEAN.Z.T
                   "MEAN.Y.TBA-J", "MEAN.Z.TBA-J", "STD.X.TBA-J", "STD.Y.TBA-J", "STD.Z.TBA-J",
                   "MEAN.X.TBG", "MEAN.Y.TBG", "MEAN.Z.TBG", "STD.X.TBG", "STD.Y.TBG",
                   "STD.Z.TBG", "MEAN.X.TBG-J", "MEAN.Y.TBG-J", "MEAN.Z.TBG-J",
-                  "STD.X.TBG-J", "STD.Y.TBG-J", "STD.Z.TBG-J", "MEAN.TBA-MAG", "STD.TBA-MAG",
-                  "MEAN.TGA-MAG", "STD.TGA-MAG", "MEAN.TBA-JMAG", "STD.TBA-JMAG", "MEAN.TBG-MAG",
-                  "STD.TBG-MAG", "MEAN.TBG-JMAG", "STD.TBG-JMAG",  "MEAN.X.FBA", "MEAN.Y.FBA", 
+                  "STD.X.TBG-J", "STD.Y.TBG-J", "STD.Z.TBG-J", "MEAN.TBA_MAG", "STD.TBA-MAG",
+                  "MEAN.TGA_MAG", "STD.TGA-MAG", "MEAN.TBA_JMAG", "STD.TBA-JMAG", "MEAN.TBG_MAG",
+                  "STD.TBG-MAG", "MEAN.TBG_JMAG", "STD.TBG-JMAG",  "MEAN.X.FBA", "MEAN.Y.FBA", 
                   "MEAN.Z.FBA", "STD.X.FBA", "STD.Y.FBA", "STD.Z.FBA", "MEAN-F.X.FBA",
                   "MEAN-F.Y.FBA", "MEAN-F.Z.FBA", "MEAN.X.FBA-J", "MEAN.Y.FBA-J", "MEAN.Z.FBA-J",
                   "STD.X.FBA-J", "STD.Y.FBA-J", "STD.Z.FBA-J", "MEAN-F.X.FBA-J", "MEAN-F.Y.FBA-J",
                   "MEAN-F.Z.FBA-J", "MEAN.X.FBG", "MEAN.Y.FBG", "MEAN.Z.FBG", "STD.X.FBG",
                   "STD.Y.FBG", "STD.Z.FBG", "MEAN-F.X.FBG", "MEAN-F.Y.FBG", "MEAN-F.Z.FBG", 
-                  "MEAN.FBA-MAG", "STD.FBA-MAG", "MEAN-F.FBA-MAG", "MEAN.FBA-JMAG", 
+                  "MEAN.FBA-MAG", "STD.FBA-MAG", "MEAN-F.FBA-MAG", "MEAN-F.FBA-JMAG", 
                   "STD.FBA-JMAG", "MEAN-F.FBA-JMAG", "MEAN.FBG-MAG", "STD.FBG-MAG", "MEAN-F.FBG-MAG", 
                   "MEAN.FBG-JMAG", "STD.FBG-JMAG", "MEAN-F.FBG-JMAG")
 
@@ -76,7 +78,7 @@ loadData <- function(){
   testData$Exercise <- testLabel; testData$SubjectID <- testSubjectID
   
   mainData <- rbind(trainData, testData);
-  mainData <- mainData[order(mainData$SubjectID), c(563, 562, 1:561)]
+  mainData <- mainData[order(mainData$SubjectID), c(562,563, 1:561)]
   
   ## Extracts only the measurements on the mean and standard deviation for each measurement
   mainData <- mainData[,mean.std.extract(names(mainData))]
@@ -89,9 +91,21 @@ loadData <- function(){
 
 dataSplitter <- function(data){
   # Return only the mean of every measurement 
-  data <- data[[mean.std.extract(names(data), keys = "MEAN")]]
   
+  mainData <- data[,mean.std.extract(names(data), keys = "^MEAN\\.[^F].+MAG$")]
+  #print(names(data))
   
+  tab <- mainData %>% group_by(SubjectID, Exercise) %>%
+          summarise("Body Average" = mean(MEAN.TBA_MAG),
+                    "Gravity Average" = mean(MEAN.TGA_MAG),
+                    "Body Jerk Average" = mean(MEAN.TBA_JMAG),
+                    "Body Gyro Average" = mean(MEAN.TBG_MAG),
+                    "Body Jerk Gyro Average" = mean(MEAN.TBG_JMAG), 
+                    .groups = "drop") %>% ungroup()
+  mainData <- cbind(data.frame(tab$SubjectID), tab[,2:7])
+  colnames(mainData) <- names(tab)
+  #write.csv(as.data.frame(tab), "./tidyData.csv")
+  return(mainData)
 }
 
 
