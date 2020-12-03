@@ -1,3 +1,11 @@
+Below is the original README that accompanied the data. Included in the repository are the requested clean data stored in tidyData.csv, the original R script for analysis titled runanalysis.R and the codebook (written in Rmarkdown) titled Codebook.html. The codebook contains information regarding the renaming convention for columns and details regarding the working of the functions in runanalysis.R.
+
+
+
+
+
+
+
 ==================================================================
 Human Activity Recognition Using Smartphones Dataset
 Version 1.0
